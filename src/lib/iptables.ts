@@ -4,22 +4,27 @@ import * as childProcess from 'child_process';
 // The following is exported so that we stub it in the tests
 export const execAsync = Promise.promisify(childProcess.exec);
 
+function applyIptablesArgs(args: string): Promise<void> {
+	return Promise.all([
+		execAsync(`iptables ${args}`),
+		execAsync(`ip6tables ${args}`),
+	]).return();
+}
+
 function clearIptablesRule(rule: string): Promise<void> {
-	return execAsync(`iptables -D ${rule}`).return();
+	return applyIptablesArgs(`-D ${rule}`);
 }
 
 function clearAndAppendIptablesRule(rule: string): Promise<void> {
 	return clearIptablesRule(rule)
 		.catchReturn(null)
-		.then(() => execAsync(`iptables -A ${rule}`))
-		.return();
+		.then(() => applyIptablesArgs(`-A ${rule}`));
 }
 
 function clearAndInsertIptablesRule(rule: string): Promise<void> {
 	return clearIptablesRule(rule)
 		.catchReturn(null)
-		.then(() => execAsync(`iptables -I ${rule}`))
-		.return();
+		.then(() => applyIptablesArgs(`-I ${rule}`));
 }
 
 export function rejectOnAllInterfacesExcept(
@@ -41,7 +46,6 @@ export function rejectOnAllInterfacesExcept(
 			.catch(() =>
 				clearAndAppendIptablesRule(`INPUT -p tcp --dport ${port} -j DROP`),
 			)
-			.return()
 	);
 }
 
