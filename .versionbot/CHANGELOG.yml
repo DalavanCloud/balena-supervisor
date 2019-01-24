@@ -1,4 +1,16 @@
 - commits:
+    - subject: Upgrade to node 8 for supported architectures
+      hash: f74cd7f8020c415a1c6b96020356ee689ec987e5
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Cameron Diver <cameron@balena.io>
+        signed-off-by: Cameron Diver <cameron@balena.io>
+      author: Cameron Diver
+  version: 9.5.0
+  date: 2019-01-24T18:08:43.058Z
+- commits:
     - subject: 'fix: Fix intial config reporting'
       hash: 9a97451e7a43524dc512f7f56e704a97369caa4b
       body: ''
